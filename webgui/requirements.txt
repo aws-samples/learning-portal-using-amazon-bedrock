@@ -1,0 +1,11 @@
+altair
+pydeck
+streamlit~=1.23.1
+matplotlib
+Pillow~=9.5.0
+requests~=2.31.0
+sagemaker~=2.165.0
+scipy~=1.10.1
+ai21~=1.1.4
+boto3~=1.28.63
+numpy~=1.24.3

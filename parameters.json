@@ -1,0 +1,8 @@
+{
+    "Parameters":  {
+        "DEV": {
+            "s3_bucket_name": "ai-education-demo-s3-bucket",
+            "ai21_api_key": "<my api key>"
+        }
+    }
+}
