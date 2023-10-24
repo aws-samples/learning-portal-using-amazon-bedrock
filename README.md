@@ -1,9 +1,7 @@
 
-# Welcome to Learning Web Application Sample project
+# Learning Application using Generative AI
 
-This is a project for a large language model showcase with Python, Amazon CDK, Amazon Bedrock, and Amazon SageMaker.
-It contains the source code of a sample web application for teachers to create course materials and for students, 
-to learn English words and sentences.
+This is a Generative AI and a large language model (LLM) project showcase using Python, Amazon CDK, Amazon Bedrock, and Amazon SageMaker. It contains the source code of a sample web application for teachers to create course materials and for students, to learn English words and sentences.
 
 What can teachers do using the web application?
 - Create questions from a sentence using a large language model 
