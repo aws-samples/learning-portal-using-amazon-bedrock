@@ -62,10 +62,6 @@ class CdkStack(Stack):
                 "logs:PutLogEvents",
                 "s3:*",
                 "secretsmanager:GetSecretValue",
-                "sagemaker:InvokeEndpoint",
-                "sagemaker:CreateEndpoint",
-                "sagemaker:DeleteEndpoint",
-                "sagemaker:DescribeEndpoint",
                 "bedrock:*",
             ]
         ))

@@ -16,7 +16,7 @@ from botocore.exceptions import ClientError
 from components.Parameter_store import S3_BUCKET_NAME
 
 dynamodb_client = boto3.resource("dynamodb")
-bedrock_client = boto3.client("bedrock-runtime", 'us-east-1')
+bedrock_client = boto3.client("bedrock-runtime")
 questions_table = dynamodb_client.Table("assignments")
 user_name = "Demo-user"
 
@@ -74,7 +74,7 @@ def query_generate_image_endpoint(input_text):
     }
     stable_diffusion_api_response = bedrock_client.invoke_model(
         body=json.dumps(input_body),
-        modelId="stability.stable-diffusion-xl",
+        modelId="stability.stable-diffusion-xl-v0",
         accept="application/json",
         contentType="application/json",
     )
@@ -101,7 +101,7 @@ def query_generate_questions_answers_endpoint(input_text):
         "anthropic_version": "bedrock-2023-05-31",
     }
     claude_qa_response = bedrock_client.invoke_model(
-        modelId="anthropic.claude-v2-100k",
+        modelId="anthropic.claude-v2",
         contentType="application/json",
         accept="*/*",
         body=json.dumps(input_body),
@@ -123,7 +123,7 @@ def query_generate_text_endpoint(input_text):
         "frequencyPenalty": {"scale": 0},
     }
     ai21_text_response = bedrock_client.invoke_model(
-        modelId="ai21.j2-jumbo-instruct",
+        modelId="ai21.j2-ultra-v1",
         accept="application/json",
         contentType="application/json",
         body=json.dumps(input_body),

@@ -1,6 +1,5 @@
 import json
 import logging
-import os
 import requests
 import streamlit as st
 import numpy as np
@@ -8,7 +7,6 @@ from PIL import Image
 from boto3.dynamodb.conditions import Key
 from botocore.exceptions import ClientError
 import boto3
-from sagemaker.huggingface.model import HuggingFacePredictor
 from scipy.spatial import distance
 from components.Parameter_store import S3_BUCKET_NAME, AI21_API_KEY
 
@@ -18,11 +16,7 @@ prompt = None
 ai21_paraphrase_url = "https://api.ai21.com/studio/v1/paraphrase"
 ai21_grammar_url = "https://api.ai21.com/studio/v1/gec"
 
-grade_endpoint = os.environ.get('grade_endpoint')
-sagemaker_client = boto3.client('runtime.sagemaker')
-endpoint_name = "sentencetranformers-t5-xl-embedding"
-predictor = HuggingFacePredictor(endpoint_name)
-
+bedrock_client = boto3.client("bedrock-runtime")
 dynamodb = boto3.resource("dynamodb")
 assignments_table = dynamodb.Table("assignments")
 answers_table = dynamodb.Table("answers")
@@ -54,12 +48,21 @@ def get_answer_record_from_dynamodb(student_id, assignment_id, question_id):
     return response["Item"]
 
 
-def get_sent_embed(payload, predictor):
-    data = {
-        "text_inputs": [payload],
+def get_text_embed(payload):
+    input_body = {
+        "inputText": payload,
     }
-    pred = predictor.predict(data)
-    return pred['embedding']
+    api_response = bedrock_client.invoke_model(
+        body=json.dumps(input_body),
+        modelId="amazon.titan-embed-text-v1",
+        accept="*/*",
+        contentType="application/json",
+    )
+    embedding_response = json.loads(
+        api_response.get("body").read().decode('utf-8')
+    )
+    embedding_array = list(embedding_response['embedding'])
+    return embedding_array
 
 
 # function to query the top five scores for a specific image_id
@@ -164,10 +167,8 @@ if assignment_selection:
 
     if answer and correct_answer:
         st.write("Your guess: ", answer)
-        # v1 = json.loads(predictor.predict(question_selection["prompt"]))
-        v1 = np.squeeze(np.array(get_sent_embed(correct_answer, predictor)))
-        # v2 = json.loads(predictor.predict(answer))
-        v2 = np.squeeze(np.array(get_sent_embed(answer, predictor)))
+        v1 = np.squeeze(np.array(get_text_embed(correct_answer)))
+        v2 = np.squeeze(np.array(get_text_embed(answer)))
         dist = distance.cosine(v1, v2)
         score = int(100 - dist * 100)
         # show the result
