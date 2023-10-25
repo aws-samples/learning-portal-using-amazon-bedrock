@@ -1,7 +1,7 @@
 
 # Building a Learning Application using Amazon Bedrock
 
-This is a Generative AI and a large language model (LLM) application showcase using Amazon Bedrock, Python, and Amazon CDK. It contains the source code of a sample web application for teachers to create course materials and for students, to learn English words and sentences.
+This is a Generative AI and a large language model (LLM) application showcase using Amazon Bedrock, Python, and AWS CDK. It contains the source code of a sample web application for teachers to create course materials and for students, to learn English words and sentences.
 
 What can teachers do using the web application?
 - Create questions from a sentence using a large language model 
